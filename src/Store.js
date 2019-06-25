@@ -48,7 +48,7 @@ export default class Store {
 
   emit(event, payload) {
     if (event === 'onUpdate') {
-      console.error('onUpdateのemitは禁止されています。');
+      console.error('Event \'onUpdate\' is not allowed to emit.');
 
       return;
     }
@@ -58,7 +58,7 @@ export default class Store {
 
   dispatch(action, payload) {
     if (typeof this.actions[action] !== 'function') {
-      console.error(`存在しないAction '${action}' がdispatchされました。`);
+      console.error(`Action '${action}' is not defined.`);
 
       return;
     }
@@ -75,7 +75,7 @@ export default class Store {
 
   commit(mutation, payload) {
     if (typeof this.mutations[mutation] !== 'function') {
-      console.error(`存在しないMutation '${mutation}' がcommitされました。`);
+      console.error(`Mutation '${mutation}' is not defined.`);
 
       return false;
     }
