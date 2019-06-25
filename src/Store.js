@@ -26,7 +26,7 @@ export default class Store {
         if (this.isMutable) {
           obj[key] = value;
         } else {
-          console.error('StateをMutation以外で変更することは禁止されています。');
+          console.error('State mutation is allowed only in Mutation.');
         }
 
         return true;
