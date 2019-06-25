@@ -82,8 +82,7 @@ export default class Store {
 
     this.isMutable = true;
 
-    const newState = this.mutations[mutation](this.getState(), payload);
-    this.state = Object.assign({}, this.state, newState);
+    this.state = this.mutations[mutation](this.getState(), payload);
 
     this.isMutable = false;
 
