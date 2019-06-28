@@ -3,7 +3,6 @@ import combine from './combine';
 
 export default class Store {
   constructor(state, actions, mutations) {
-    this.isMutable = false;
 
     if (state instanceof Array) {
       state = combine(state);
@@ -20,18 +19,6 @@ export default class Store {
     this.actions = actions;
     this.mutations = mutations;
     this.events = new EventEmitter();
-
-    this.state = new Proxy((state || {}), {
-      set: (obj, key, value) => {
-        if (this.isMutable) {
-          obj[key] = value;
-        } else {
-          console.error('State mutation is allowed only in Mutation.');
-        }
-
-        return true;
-      }
-    });
   }
 
   getState() {
@@ -80,12 +67,7 @@ export default class Store {
       return false;
     }
 
-    this.isMutable = true;
-
     this.state = this.mutations[mutation](this.getState(), payload);
-
-    this.isMutable = false;
-
     this.events.emit('onUpdate', this.getState());
 
     return true;
