@@ -16,6 +16,7 @@ export default class Store {
       mutations = combine(mutations);
     }
 
+    this.state = state;
     this.actions = actions;
     this.mutations = mutations;
     this.events = new EventEmitter();
