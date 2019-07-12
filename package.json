@@ -6,6 +6,9 @@
   "scripts": {
     "build": "rollup -c"
   },
+  "dependencies": {
+    "proxy-polyfill": "^0.3.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
@@ -13,6 +16,7 @@
     "@babel/preset-env": "^7.4.5",
     "eslint": "^6.0.1",
     "rollup": "^1.16.6",
-    "rollup-plugin-babel": "^4.3.3"
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0"
   }
 }

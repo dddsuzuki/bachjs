@@ -16,7 +16,27 @@ export default class Store {
       mutations = combine(mutations);
     }
 
-    this.state = state;
+    const handler = {
+      get(target, property) {
+        if (target[property] instanceof Object) {
+          return new Proxy(target[property], handler);
+        }
+
+        return target[property];
+      },
+
+      set: (target, property, value) => {
+        if (this.isMutable) {
+          target[property] = value;
+        } else {
+          console.error('State mutation is allowed only in Mutation.');
+        }
+
+        return true;
+      }
+    };
+
+    this.state = new Proxy(state, handler);
     this.actions = actions;
     this.mutations = mutations;
     this.events = new EventEmitter();
