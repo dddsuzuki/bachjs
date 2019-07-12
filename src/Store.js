@@ -3,6 +3,7 @@ import combine from './combine';
 
 export default class Store {
   constructor(state, actions, mutations) {
+    this.isMutable = false;
 
     if (state instanceof Array) {
       state = combine(state);
@@ -17,7 +18,7 @@ export default class Store {
     }
 
     const handler = {
-      get(target, property) {
+      get: (target, property) => {
         if (target[property] instanceof Object) {
           return new Proxy(target[property], handler);
         }
@@ -43,7 +44,7 @@ export default class Store {
   }
 
   getState() {
-    return Object.assign({}, this.state);
+    return this.state;
   }
 
   subscribe(event, callback) {
@@ -72,7 +73,7 @@ export default class Store {
     }
 
     const context = {
-      state: this.getState(),
+      state: this.state,
       emit: this.emit.bind(this),
       dispatch: this.dispatch.bind(this),
       commit: this.commit.bind(this),
@@ -88,8 +89,14 @@ export default class Store {
       return false;
     }
 
-    this.state = this.mutations[mutation](this.getState(), payload);
-    this.events.emit('onUpdate', this.getState());
+    this.isMutable = true;
+
+    const newState = this.mutations[mutation](this.state, payload);
+    this.state = Object.assign(this.state, newState);
+
+    this.isMutable = false;
+
+    this.events.emit('onUpdate', this.state);
 
     return true;
   }
